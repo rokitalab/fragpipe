@@ -20,7 +20,6 @@ RUN apt-get -y install mono-devel
 RUN apt-get -y install \
     git \
     python3.9 \
-    python3-pip \
     tar \
     unzip \
     wget \
@@ -29,6 +28,7 @@ RUN apt-get -y install \
     dotnet-runtime-6.0
 
 # install python packages
+RUN python3 -m pip install --upgrade pip
 RUN pip uninstall easypqp \
     && pip install git+https://github.com/Nesvilab/easypqp.git@master \
     && pip install lxml
