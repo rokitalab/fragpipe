@@ -18,13 +18,19 @@ RUN apt-get -y install mono-devel
 
 # install dependencies
 RUN apt-get -y install \
+    curl \
+    dotnet-runtime-6.0 \
+    fuse \
     git \
+    man-db \
+    openjdk-17-jdk \
     tar \
     unzip \
-    wget \
-    openjdk-17-jdk \
     vim \
-    dotnet-runtime-6.0
+    wget 
+
+# install CAVATICA SBFS
+RUN curl https://igor.sbgenomics.com/downloads/sbfs/install.sh -sSf | sudo sh
 
 # install python packages
 # Download and install Python 3.11
