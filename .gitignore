@@ -47,3 +47,9 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# fragpipe required tools
+IonQuant-1.10.27.jar
+MSFragger-4.1.jar
+diaTracer-1.1.5.jar
+

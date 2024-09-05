@@ -19,7 +19,6 @@ RUN apt-get -y install mono-devel
 # install dependencies
 RUN apt-get -y install \
     git \
-    python3.9 \
     tar \
     unzip \
     wget \
@@ -28,6 +27,18 @@ RUN apt-get -y install \
     dotnet-runtime-6.0
 
 # install python packages
+# Download and install Python 3.11
+RUN cd /usr/src && \
+    wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz && \
+    tar xzf Python-3.11.0.tgz && \
+    cd Python-3.11.0 && \
+    ./configure --enable-optimizations && \
+    make altinstall && \
+    rm -rf /usr/src/Python-3.11.0.tgz
+
+# Setup the default python commands to use Python 3.11
+RUN ln -s /usr/local/bin/python3.11 /usr/local/bin/python3 && \
+    ln -s /usr/local/bin/python3.11 /usr/local/bin/python
 RUN python3 -m pip install --upgrade pip
 RUN pip uninstall easypqp \
     && pip install git+https://github.com/Nesvilab/easypqp.git@master \
@@ -54,7 +65,7 @@ RUN export JAVA_HOME
 # copy Fragpipe dependencies 
 
 COPY MSFragger-4.1.jar /fragpipe_bin/fragPipe-22.0/fragpipe/tools/MSFragger-4.1.jar 
-COPY diaTracer-1.1.3.jar /fragpipe_bin/fragPipe-22.0/fragpipe/tools/diaTracer-1.1.3.jar
+COPY diaTracer-1.1.5.jar /fragpipe_bin/fragPipe-22.0/fragpipe/tools/diaTracer-1.1.5.jar
 COPY IonQuant-1.10.27.jar /fragpipe_bin/fragPipe-22.0/fragpipe/tools/IonQuant-1.10.27.jar
 
 WORKDIR /rocker-build/
