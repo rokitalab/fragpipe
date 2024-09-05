@@ -15,18 +15,16 @@ fi
 
 echo "Adding decoys and contaminants to FASTA files.."
 cd $input_dir
-gunzip UP000005640_9606.fasta.gz
 
 # Initialize the Philosopher workspace
 $tools_dir/Philosopher/philosopher-v5.1.1 workspace --init
 
 # Add decoys and contaminants to the custom FASTA file
-$tools_dir/Philosopher/philosopher-v5.1.1 database --custom custom.fasta --add UP000005640_9606.fasta --contam
+gunzip -c UP000005640_9606.fasta.gz | $tools_dir/Philosopher/philosopher-v5.1.1 database --custom custom.fasta --add /dev/stdin --contam
 mv *decoys-contam-custom.fasta.fas decoys-contam-custom-canonical.fasta
 
 # Clean intermediate files
 $tools_dir/Philosopher/philosopher-v5.1.1 workspace --clean 
-gzip UP000005640_9606.fasta
 
 # Return to the previous directory
 cd -
