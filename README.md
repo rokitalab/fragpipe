@@ -1,5 +1,6 @@
-# FragPipe
-For FragPipe custom mass spectrometry library epitope searching development
+# FragPipe command line interface
+This repository was created to enable custom mass spectrometry library epitope searching using FragPipe via the command line, adapted from https://github.com/Nesvilab/FragPipe.
+For more information, please see our Wiki.
 
 Note: Canonical FASTA `UP000005640_9606.fasta` was obtained from [UniProt](https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/UP000005640/), last modified date of 2024-07-24.
 
