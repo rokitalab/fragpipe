@@ -81,7 +81,7 @@ fi
 res_dir=/home/rstudio/fragpipe/results
 tools_dir=/fragpipe_bin/fragPipe-23.1/fragpipe/tools
 
-/fragpipe_bin/fragPipe-22.0/fragpipe/bin/fragpipe --headless --workflow $wf --manifest $manifest --workdir $res_dir --config-tools-folder $tools_dir
+/fragpipe_bin/fragPipe-23.1/fragpipe/bin/fragpipe --headless --workflow $wf --manifest $manifest --workdir $res_dir --config-tools-folder $tools_dir
 
 # clear tmp directory
 rm -rf $tmp_dir/*
