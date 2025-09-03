@@ -1,0 +1,12 @@
+# Example CWL Job Inputs for FragPipe Peptide Preprocessing Workflow
+# This example assumes files are in the input/ directory relative to the workflow
+
+custom_fasta:
+  class: File
+  path: "../../input/custom.fasta"
+  doc: "Custom peptide sequences of interest - user-provided FASTA file"
+
+uniprot_canonical_fasta:
+  class: File
+  path: "../../input/UP000005640_9606.fasta.gz"
+  doc: "Gzipped UniProt canonical human proteome sequences (Homo sapiens, reference proteome)"

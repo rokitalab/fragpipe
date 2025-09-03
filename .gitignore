@@ -52,7 +52,7 @@ rsconnect/
 IonQuant-1.10.27.jar
 MSFragger-4.1.jar
 diaTracer-1.1.5.jar
-
+fragPipe-23.1/
 # data folder contents, tmp folder
 data/*
 tmp/
