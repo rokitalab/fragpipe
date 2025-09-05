@@ -91,6 +91,12 @@ manifest=/home/rstudio/fragpipe/tumor-enriched-splicing/input/PDC000180filesmani
 fi
 
 res_dir=/home/rstudio/fragpipe/tumor-enriched-splicing/results-cptac
+
+if [ ! -d $res_dir ]; then
+  mkdir -p $res_dir
+  echo "Creating results directory..."
+fi
+
 tools_dir=/fragpipe_bin/fragPipe-23.1/fragpipe-23.1/tools/
 
 /fragpipe_bin/fragPipe-23.1/fragpipe-23.1/bin/fragpipe --headless --workflow $wf --manifest $manifest --workdir $res_dir --config-tools-folder $tools_dir
