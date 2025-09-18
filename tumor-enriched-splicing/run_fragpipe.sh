@@ -5,7 +5,7 @@ set -o pipefail
 
 # Set tools and input directories
 input_dir=input
-tools_dir=/fragpipe_bin/fragPipe-23.1/fragpipe-23.1/tools/
+tools_dir=/fragpipe_bin/fragPipe-22.0/fragpipe/tools/
 
 # Error out if no custom.fasta is provided
 if [ ! -e "$input_dir/custom.fasta" ]; then
@@ -17,16 +17,29 @@ echo "Adding decoys and contaminants to FASTA files.."
 cd $input_dir
 
 # Initialize the Philosopher workspace
-$tools_dir/Philosopher/philosopher-v5.1.2 workspace --init
+$tools_dir/Philosopher/philosopher-v5.1.1 workspace --init
 
 Uniprot_canonical=/home/rstudio/fragpipe/refs/UP000005640_9606.fasta.gz
 
 # Add decoys and contaminants to the custom FASTA file
-gunzip -c $Uniprot_canonical | $tools_dir/Philosopher/philosopher-v5.1.2 database --custom custom.fasta --add /dev/stdin --contam
-mv *decoys-contam-custom.fasta.fas decoys-contam-custom-canonical.fasta
+gunzip -c $Uniprot_canonical | $tools_dir/Philosopher/philosopher-v5.1.1 database --custom custom.fasta --add /dev/stdin --contam
+#$tools_dir/Philosopher/philosopher-v5.1.1 database --custom custom.fasta --contam
+
+#mv *decoys-contam-custom.fasta.fas decoys-contam-custom-canonical.fasta
+# Remove canonica peptides annotated to genes with TESEs
+grep "^>" custom.fasta | awk -F'[:_]' '{print "GN=" $2 " "}' | sort -u > gene_symbols.txt
+
+awk 'BEGIN{while((getline k < "gene_symbols.txt") > 0){a[k]=1}}
+     /^>/{
+         keep=1
+         for (g in a) {
+             if (index($0,g)) {keep=0; break}
+         }
+     }
+     keep' *decoys-contam-custom.fasta.fas > decoys-contam-custom-canonical.fasta
 
 # Clean intermediate files
-$tools_dir/Philosopher/philosopher-v5.1.2 workspace --clean 
+$tools_dir/Philosopher/philosopher-v5.1.1 workspace --clean 
 
 # Return to the previous directory
 cd -
@@ -90,16 +103,16 @@ manifest=/home/rstudio/fragpipe/tumor-enriched-splicing/input/PDC000180filesmani
 
 fi
 
-res_dir=/home/rstudio/fragpipe/tumor-enriched-splicing/results-cptac
+res_dir=/home/rstudio/fragpipe/tumor-enriched-splicing/results-cptac-filtered-canon
 
 if [ ! -d $res_dir ]; then
   mkdir -p $res_dir
   echo "Creating results directory..."
 fi
 
-tools_dir=/fragpipe_bin/fragPipe-23.1/fragpipe-23.1/tools/
+tools_dir=/fragpipe_bin/fragPipe-22.0/fragpipe/tools/
 
-/fragpipe_bin/fragPipe-23.1/fragpipe-23.1/bin/fragpipe --headless --workflow $wf --manifest $manifest --workdir $res_dir --config-tools-folder $tools_dir
+/fragpipe_bin/fragPipe-22.0/fragpipe/bin/fragpipe --headless --workflow $wf --manifest $manifest --workdir $res_dir --config-tools-folder $tools_dir
 
 # clear tmp directory
 rm -rf $tmp_dir/*
