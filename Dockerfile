@@ -70,9 +70,9 @@ RUN export JAVA_HOME
 
 # copy Fragpipe dependencies 
 
-COPY MSFragger-4.3.jar /fragpipe_bin/fragPipe-23.1/fragpipe/tools/MSFragger-4.3.jar 
-COPY diaTracer-1.3.3.jar /fragpipe_bin/fragPipe-23.1/fragpipe/tools/diaTracer-1.3.3.jar
-COPY IonQuant-1.11.11.jar /fragpipe_bin/fragPipe-23.1/fragpipe/tools/IonQuant-1.11.11.jar
+COPY MSFragger-4.3.jar /fragpipe_bin/fragPipe-23.1/fragpipe-23.1/tools/MSFragger-4.3.jar 
+COPY diaTracer-1.3.3.jar /fragpipe_bin/fragPipe-23.1/fragpipe-23.1/tools/diaTracer-1.3.3.jar
+COPY IonQuant-1.11.11.jar /fragpipe_bin/fragPipe-23.1/fragpipe-23.1/tools/IonQuant-1.11.11.jar
 
 WORKDIR /rocker-build/
 
