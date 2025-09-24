@@ -40,18 +40,12 @@ if [[ -z "$query" ]]; then
   exit 1
 fi
 
-# # Error out if no custom.fasta is provided
-# if [ ! -e "$input_dir/custom.fasta" ]; then
-#   echo "Error: must supply a custom.fasta file in the input directory ($input_dir)"
-#   exit 1
-# fi
-
 # obtain full path of query fasta
 query_fullpath=$(realpath "$query")
 
 # filter out peptides with 100% match to uniprot canonical peptides
-echo "Filtering out 100% matches to canonical peptides..."
-bash scripts/run_blast_filter.sh --fasta $query_fullpath
+#echo "Filtering out 100% matches to canonical peptides..."
+#bash scripts/run_blast_filter.sh --fasta $query_fullpath
 
 echo "Adding decoys and contaminants to FASTA files.."
 cd $input_dir

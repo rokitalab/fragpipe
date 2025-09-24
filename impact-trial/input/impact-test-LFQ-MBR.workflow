@@ -2,7 +2,7 @@
 
 # Please edit the following path to point to the correct location.
 # In Windows, please replace single '\' with '\\'
-database.db-path=/home/rstudio/fragpipe/input/decoys-contam-custom-canonical.fasta
+database.db-path=/home/rstudio/fragpipe/impact-trial/input/decoys-contam-custom-canonical.fasta
 
 crystalc.run-crystalc=false
 database.decoy-tag=rev_
@@ -217,7 +217,7 @@ opair.single_scan_type=false
 peptide-prophet.cmd-opts=--decoyprobs --ppm --accmass --nonparam --expectscore
 peptide-prophet.combine-pepxml=false
 peptide-prophet.run-peptide-prophet=false
-percolator.cmd-opts=--only-psms --no-terminate --post-processing-tdc
+percolator.cmd-opts=--only-psms --no-terminate --post-processing-tdc --testFDR 0.05 --trainFDR 0.05
 percolator.keep-tsv-files=false
 percolator.min-prob=0.5
 percolator.run-percolator=true
