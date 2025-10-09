@@ -51,8 +51,7 @@ RUN pip uninstall easypqp \
     && pip install lxml
     
 RUN apt-get update && \
-    apt-get install -y ncbi-blast+ wget unzip && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y ncbi-blast+ 
 
 # Install latest seqkit
 RUN wget https://github.com/shenwei356/seqkit/releases/download/v2.9.0/seqkit_linux_amd64.tar.gz && \
