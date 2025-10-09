@@ -49,6 +49,15 @@ RUN python3 -m pip install --upgrade pip
 RUN pip uninstall easypqp \
     && pip install git+https://github.com/Nesvilab/easypqp.git@master \
     && pip install lxml
+    
+RUN apt-get update && \
+    apt-get install -y ncbi-blast+ 
+
+# Install latest seqkit
+RUN wget https://github.com/shenwei356/seqkit/releases/download/v2.9.0/seqkit_linux_amd64.tar.gz && \
+    tar -zxvf seqkit_linux_amd64.tar.gz && \
+    mv seqkit /usr/local/bin/ && \
+    rm seqkit_linux_amd64.tar.gz
 
 # create a directory with 777 permission and set it to the work directory
 RUN mkdir /fragpipe_bin
@@ -60,8 +69,8 @@ RUN mkdir tmp
 RUN chmod 777 tmp
 
 # download and install fragPipe
-RUN wget https://github.com/Nesvilab/FragPipe/releases/download/23.1/FragPipe-23.1-linux.zip -P fragPipe-23.1
-RUN unzip fragPipe-23.1/FragPipe-23.1-linux.zip -d fragPipe-23.1
+RUN wget https://github.com/Nesvilab/FragPipe/releases/download/22.0/FragPipe-22.0.zip -P fragPipe-22.0
+RUN unzip fragPipe-22.0/FragPipe-22.0.zip -d fragPipe-22.0
 RUN chmod -R 777 /fragpipe_bin
 
 # set environment variables
@@ -69,10 +78,9 @@ ENV JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/"
 RUN export JAVA_HOME
 
 # copy Fragpipe dependencies 
-
-COPY MSFragger-4.3.jar /fragpipe_bin/fragPipe-23.1/fragpipe-23.1/tools/MSFragger-4.3.jar 
-COPY diaTracer-1.3.3.jar /fragpipe_bin/fragPipe-23.1/fragpipe-23.1/tools/diaTracer-1.3.3.jar
-COPY IonQuant-1.11.11.jar /fragpipe_bin/fragPipe-23.1/fragpipe-23.1/tools/IonQuant-1.11.11.jar
+COPY MSFragger-4.1.jar /fragpipe_bin/fragPipe-22.0/fragpipe/tools/MSFragger-4.1.jar 
+COPY diaTracer-1.1.5.jar /fragpipe_bin/fragPipe-22.0/fragpipe/tools/diaTracer-1.1.5.jar
+COPY IonQuant-1.10.27.jar /fragpipe_bin/fragPipe-22.0/fragpipe/tools/IonQuant-1.10.27.jar
 
 WORKDIR /rocker-build/
 
