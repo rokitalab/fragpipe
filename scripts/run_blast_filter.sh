@@ -36,7 +36,8 @@ cd "$(dirname "$0")"
 blastp -query $fasta \
        -db ../refs/uniprot_human \
        -out ../input/blast_results.tsv \
-       -outfmt "6 qseqid sseqid pident length qlen slen"
+       -outfmt "6 qseqid sseqid pident length qlen slen" \
+       -evalue 1000 -word_size 2 -comp_based_stats 0 -seg no
 
 # 2. Extract query IDs with full-length 100% matches
 awk '$3 == 100 && $4 == $5 {print $1}' ../input/blast_results.tsv | sort -u > ../input/full_matches.txt
@@ -51,5 +52,4 @@ echo "Filtered out (100% UniProt matches): $matches"
 echo "Remaining peptides: $remaining"
 
 # 4. Filter FASTA
-seqkit grep -v -f ../input/full_matches.txt $fasta \
-    > ../input/custom.filtered.fasta
+seqkit grep -v -f ../input/full_matches.txt $fasta > ../input/custom.filtered.fasta
