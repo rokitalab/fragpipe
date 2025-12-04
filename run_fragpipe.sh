@@ -121,10 +121,6 @@ query_fullpath=$(realpath "$query")
 manifest_fullpath=$(realpath "$manifest")
 workflow_fullpath=$(realpath "$workflow")
 
-# filter out peptides with 100% match to uniprot canonical peptides
-echo "Filtering out 100% matches to canonical peptides..."
-bash scripts/run_blast_filter.sh --fasta $query_fullpath
-
 echo "Adding decoys and contaminants to FASTA files.."
 cd $input_dir
 
@@ -135,10 +131,10 @@ $tools_dir/Philosopher/philosopher-v5.1.1 workspace --init
 Uniprot_canonical=/home/rstudio/fragpipe/refs/UP000005640_9606.fasta.gz
 
 # Add decoys and contaminants to the custom FASTA file
-gunzip -c $Uniprot_canonical | $tools_dir/Philosopher/philosopher-v5.1.1 database --custom custom.filtered.fasta --add /dev/stdin --contam
+gunzip -c $Uniprot_canonical | $tools_dir/Philosopher/philosopher-v5.1.1 database --custom $query_fullpath --add /dev/stdin --contam
 
 # Remove canonical peptides annotated to genes in custom fasta
-grep "^>" custom.filtered.fasta | awk -F'[:_]' '{print "GN=" $2 " "}' | sort -u > gene_symbols.txt
+grep "^>" $query_fullpath | awk -F'[:_]' '{print "GN=" $2 " "}' | sort -u > gene_symbols.txt
 
 awk 'BEGIN{while((getline k < "gene_symbols.txt") > 0){a[k]=1}}
      /^>/{
@@ -147,7 +143,7 @@ awk 'BEGIN{while((getline k < "gene_symbols.txt") > 0){a[k]=1}}
              if (index($0,g)) {keep=0; break}
          }
      }
-     keep' *decoys-contam-custom.filtered.fasta.fas > decoys-contam-custom-canonical.fasta
+     keep' *decoys-contam-custom.fasta.fas > decoys-contam-custom-canonical.fasta
 
 # Clean intermediate files
 $tools_dir/Philosopher/philosopher-v5.1.1 workspace --clean
@@ -188,6 +184,17 @@ if [[ -n "$cohort" ]]; then
       echo "Error: path to cavatica project directory does not exist. Attempting to mount project with sbfs mount..."
     
       sbfs mount --profile default --project $project cavatica-data
+      
+      echo "Waiting for sbfs mount to become active..."
+      until mountpoint -q cavatica-data; do
+        sleep 1
+      done
+      echo "Mount is active."
+      
+      echo "Waiting for proteomics files to become visible..."
+      until ls /home/rstudio/fragpipe/cavatica-data/projects/harenzaj/proteomics/*01CBTTC_PBT_Proteome* 1>/dev/null 2>&1; do
+        sleep 1
+      done
 
     fi
     
@@ -209,11 +216,11 @@ if [[ -n "$cohort" ]]; then
     
        if [ "$run_subset" = TRUE ]; then
     
-       cp -R $cavatica_dir/*01CBTTC_PBT_Proteome* $tmp_dir
+       cp -R $cavatica_dir/*01CBTTC_PBT_Proteome* $tmp_dir || cp -R $cavatica_dir/*01CBTTC_PBT_Proteome* $tmp_dir
     
        else
     
-       cp -R $cavatica_dir/*CBTTC_PBT_Proteome* $tmp_dir
+       cp -R $cavatica_dir/*CBTTC_PBT_Proteome* $tmp_dir || cp -R $cavatica_dir/*01CBTTC_PBT_Proteome* $tmp_dir
     
        fi
     
@@ -225,11 +232,11 @@ if [[ -n "$cohort" ]]; then
     
        if [ "$run_subset" = TRUE ]; then
     
-       cp -R $cavatica_dir/*01CPTAC_AYA_Proteome* $tmp_dir
+       cp -R $cavatica_dir/*01CPTAC_AYA_Proteome* $tmp_dir || cp -R $cavatica_dir/*01CBTTC_PBT_Proteome* $tmp_dir
     
        else
     
-       cp -R $cavatica_dir/*CPTAC_AYA_Proteome* $tmp_dir
+       cp -R $cavatica_dir/*CPTAC_AYA_Proteome* $tmp_dir || cp -R $cavatica_dir/*01CBTTC_PBT_Proteome* $tmp_dir
     
      fi
      
