@@ -181,7 +181,7 @@ if [[ -n "$cohort" ]]; then
     fi
     
     if [ ! -d $cavatica_dir ]; then
-      echo "Error: path to cavatica project directory does not exist. Attempting to mount project with sbfs mount..."
+      echo "Path to cavatica project directory does not exist. Attempting to mount project with sbfs mount..."
     
       sbfs mount --profile default --project $project cavatica-data
       
@@ -192,7 +192,7 @@ if [[ -n "$cohort" ]]; then
       echo "Mount is active."
       
       echo "Waiting for proteomics files to become visible..."
-      until ls /home/rstudio/fragpipe/cavatica-data/projects/harenzaj/proteomics/*01CBTTC_PBT_Proteome* 1>/dev/null 2>&1; do
+      until ls $cavatica_dir/*Proteome* 1>/dev/null 2>&1; do
         sleep 1
       done
 
@@ -216,11 +216,11 @@ if [[ -n "$cohort" ]]; then
     
        if [ "$run_subset" = TRUE ]; then
     
-       cp -R $cavatica_dir/*01CBTTC_PBT_Proteome* $tmp_dir || cp -R $cavatica_dir/*01CBTTC_PBT_Proteome* $tmp_dir
+       cp -R $cavatica_dir/*01CBTTC_PBT_Proteome* $tmp_dir
     
        else
     
-       cp -R $cavatica_dir/*CBTTC_PBT_Proteome* $tmp_dir || cp -R $cavatica_dir/*01CBTTC_PBT_Proteome* $tmp_dir
+       cp -R $cavatica_dir/*CBTTC_PBT_Proteome* $tmp_dir 
     
        fi
     
@@ -232,11 +232,11 @@ if [[ -n "$cohort" ]]; then
     
        if [ "$run_subset" = TRUE ]; then
     
-       cp -R $cavatica_dir/*01CPTAC_AYA_Proteome* $tmp_dir || cp -R $cavatica_dir/*01CBTTC_PBT_Proteome* $tmp_dir
+       cp -R $cavatica_dir/*01CPTAC_AYA_Proteome* $tmp_dir 
     
        else
     
-       cp -R $cavatica_dir/*CPTAC_AYA_Proteome* $tmp_dir || cp -R $cavatica_dir/*01CBTTC_PBT_Proteome* $tmp_dir
+       cp -R $cavatica_dir/*CPTAC_AYA_Proteome* $tmp_dir 
     
      fi
      
