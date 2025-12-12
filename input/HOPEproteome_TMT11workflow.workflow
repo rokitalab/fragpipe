@@ -3,7 +3,7 @@
 
 # Please edit the following path to point to the correct location.
 # In Windows, please replace single '\' with '\\'
-database.db-path=/home/rstudio/fragpipe/tumor-enriched-splicing/input/decoys-contam-custom-canonical.fasta
+database.db-path=/home/rstudio/fragpipe/input/decoys-contam-custom-canonical.fasta
 
 crystalc.run-crystalc=false
 database.decoy-tag=rev_
