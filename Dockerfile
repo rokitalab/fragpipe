@@ -49,6 +49,15 @@ RUN python3 -m pip install --upgrade pip
 RUN pip uninstall easypqp \
     && pip install git+https://github.com/Nesvilab/easypqp.git@master \
     && pip install lxml
+    
+RUN apt-get update && \
+    apt-get install -y ncbi-blast+ 
+
+# Install latest seqkit
+RUN wget https://github.com/shenwei356/seqkit/releases/download/v2.9.0/seqkit_linux_amd64.tar.gz && \
+    tar -zxvf seqkit_linux_amd64.tar.gz && \
+    mv seqkit /usr/local/bin/ && \
+    rm seqkit_linux_amd64.tar.gz
 
 # create a directory with 777 permission and set it to the work directory
 RUN mkdir /fragpipe_bin
