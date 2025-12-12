@@ -60,8 +60,8 @@ RUN mkdir tmp
 RUN chmod 777 tmp
 
 # download and install fragPipe
-RUN wget https://github.com/Nesvilab/FragPipe/releases/download/23.1/FragPipe-23.1-linux.zip -P fragPipe-23.1
-RUN unzip fragPipe-23.1/FragPipe-23.1-linux.zip -d fragPipe-23.1
+RUN wget https://github.com/Nesvilab/FragPipe/releases/download/22.0/FragPipe-22.0.zip -P fragPipe-22.0
+RUN unzip fragPipe-22.0/FragPipe-22.0.zip -d fragPipe-22.0
 RUN chmod -R 777 /fragpipe_bin
 
 # set environment variables
@@ -70,9 +70,9 @@ RUN export JAVA_HOME
 
 # copy Fragpipe dependencies 
 
-COPY MSFragger-4.3.jar /fragpipe_bin/fragPipe-23.1/fragpipe-23.1/tools/MSFragger-4.3.jar 
-COPY diaTracer-1.3.3.jar /fragpipe_bin/fragPipe-23.1/fragpipe-23.1/tools/diaTracer-1.3.3.jar
-COPY IonQuant-1.11.11.jar /fragpipe_bin/fragPipe-23.1/fragpipe-23.1/tools/IonQuant-1.11.11.jar
+COPY MSFragger-4.1.jar /fragpipe_bin/fragPipe-22.0/fragpipe/tools/MSFragger-4.1.jar 
+COPY diaTracer-1.1.5.jar /fragpipe_bin/fragPipe-22.0/fragpipe/tools/diaTracer-1.1.5.jar
+COPY IonQuant-1.10.27.jar /fragpipe_bin/fragPipe-22.0/fragpipe/tools/IonQuant-1.10.27.jar
 
 WORKDIR /rocker-build/
 
