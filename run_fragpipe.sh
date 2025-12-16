@@ -134,9 +134,49 @@ Uniprot_canonical=/home/rstudio/fragpipe/refs/UP000005640_9606.fasta.gz
 gunzip -c $Uniprot_canonical | $tools_dir/Philosopher/philosopher-v5.1.1 database --custom $query_fullpath --add /dev/stdin --contam
 
 # Remove canonical peptides annotated to genes in custom fasta
-grep "^>" $query_fullpath | awk -F'[:_]' '{print "GN=" $2 " "}' | sort -u > gene_symbols.txt
 
-awk 'BEGIN{while((getline k < "gene_symbols.txt") > 0){a[k]=1}}
+# splice event genes
+awk '/^>/ {match($0, /_([^_]+)_phase[0-9]+$/, a); print a[1]}' $query_fullpath \
+| grep -v '^$' \
+| sort \
+| uniq > splice_event_genes.txt
+
+# snv genes
+awk -F '|' '{print $3}' $query_fullpath \
+| grep -v '^$' \
+| grep -v '\^ENS' \
+| sort \
+| uniq > snv_genes.txt
+
+# arriba fusion genes
+grep '^>arriba' $query_fullpath  \
+| awk -F'|' '{print $3; print $6}' \
+| grep -v '^$' \
+| grep -v ',' \
+| grep -v 'ENSP' \
+| grep -v "^chr" \
+| grep -v '\^ENS' \
+| grep -v 'NP_' \
+| sort \
+| uniq > arriba_fusion_genes.txt
+
+# star fusion genes
+grep '^>star' $query_fullpath \
+| awk -F'|' '{gsub(/\^.*/,"",$2); gsub(/\^.*/,"",$5); print $2; print $5}' \
+| grep -v '-' \
+| sort \
+| uniq > star_fusion_genes.txt
+
+# merge gene lists
+cat splice_event_genes.txt snv_genes.txt arriba_fusion_genes.txt star_fusion_genes.txt \
+|sort \
+| uniq > genes_to_rm.txt
+
+# append "GN" to match gene designation in canonical fasta
+sed 's/^/GN=/' genes_to_rm.txt > gn_genes_to_rm.txt
+
+# remove genese from custom + canonical fasta
+awk 'BEGIN{while((getline k < "gn_genes_to_rm.txt") > 0){a[k]=1}}
      /^>/{
          keep=1
          for (g in a) {
