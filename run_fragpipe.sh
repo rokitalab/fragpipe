@@ -136,10 +136,14 @@ gunzip -c $Uniprot_canonical | $tools_dir/Philosopher/philosopher-v5.1.1 databas
 # Remove canonical peptides annotated to genes in custom fasta
 
 # splice event genes
-awk '/^>/ {match($0, /_([^_]+)_phase[0-9]+$/, a); print a[1]}' $query_fullpath \
+awk '/^>/ {
+  line = $0
+  sub(/^.*_/, "", line)
+  sub(/_phase[0-9]+$/, "", line)
+  print line
+}' "$query_fullpath" \
 | grep -v '^$' \
-| sort \
-| uniq > splice_event_genes.txt
+| sort -u > splice_event_genes.txt
 
 # snv genes
 awk -F '|' '{print $3}' $query_fullpath \
